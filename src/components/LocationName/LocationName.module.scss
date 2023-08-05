@@ -1,0 +1,9 @@
+.locationName {
+  span {
+    @apply block;
+
+    &:first-of-type {
+      @apply font-bold;
+    }
+  }
+}

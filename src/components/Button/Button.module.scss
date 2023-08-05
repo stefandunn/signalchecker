@@ -1,0 +1,15 @@
+.button {
+  @apply bg-slate-700 text-white cursor-pointer py-2 px-7 rounded-full relative hover:bg-slate-800 hover:shadow-lg;
+}
+
+.buttonLoading {
+  @apply text-transparent;
+}
+
+.buttonLoader {
+  @apply absolute left-0 top-0 w-full h-full flex items-center justify-center text-white;
+
+  svg {
+    @apply animate-spin;
+  }
+}

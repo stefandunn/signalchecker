@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "~mapbox-gl/dist/mapbox-gl.css";
+
+body {
+  @apply font-normal;
+}
+
+* {
+  @apply font-sans-serif;
+}
+
+.loading {
+  @apply animate-pulse;
+
+  &.loading-dark {
+    @apply bg-slate-800;
+  }
+
+  &:not(.loading-dark) {
+    @apply bg-slate-300;
+  }
+}
