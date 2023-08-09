@@ -1,0 +1,43 @@
+.modal {
+  @apply fixed z-20 top-0 left-0 w-full h-full flex items-center justify-center p-5 transition-opacity duration-300 bg-transparent backdrop-blur-md;
+  animation-name: fadeIn;
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+
+  &:not([open]) {
+    @apply opacity-0;
+  }
+}
+
+.modalCloseBtn {
+  @apply float-right relative -top-2 -right-2 rounded-full border-2 border-transparent;
+
+  &:focus {
+    @apply border-slate-400;
+  }
+}
+.modalBg {
+  @apply absolute z-0 top-0 left-0 w-full h-full bg-slate-950 bg-opacity-70;
+}
+
+.modalContainer {
+  @apply relative z-10 w-full max-w-[600px] bg-slate-100 rounded-2xl shadow-2xl p-5;
+}
+
+.modalTitle {
+  @apply block text-xl font-bold mb-5;
+}
+
+.modalContent {
+  @apply max-h-[70vh] overflow-auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

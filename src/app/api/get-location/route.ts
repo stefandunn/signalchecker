@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { NextApiHandler } from "next";
 import { NextResponse } from "next/server";
 
 type geoIPResponse = {
@@ -31,7 +32,7 @@ type geoIPResponse = {
   org: string;
 };
 
-export const GET = async () => {
+export const GET: NextApiHandler = async () => {
   return axios
     .get("https://api.ipify.org/?format=json")
     .then(({ data: { ip } }: AxiosResponse<{ ip: string }>) =>

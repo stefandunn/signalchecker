@@ -1,0 +1,11 @@
+.form {
+  label {
+    @apply block mb-2;
+  }
+  select,
+  input {
+    @apply p-2 border-2 border-slate-400 rounded-xl w-full appearance-none bg-no-repeat;
+    background-size: auto 24px;
+    background-position: calc(100% - 1rem) center;
+  }
+}

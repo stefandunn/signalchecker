@@ -8,6 +8,7 @@ export const Button: FC<ButtonProps> = ({
   className,
   children,
   loading,
+  type = "button",
   ...props
 }) => (
   <button
@@ -16,6 +17,7 @@ export const Button: FC<ButtonProps> = ({
       buttonStyles.button,
       loading && buttonStyles.buttonLoading
     )}
+    type={type}
     {...props}
   >
     {children}
