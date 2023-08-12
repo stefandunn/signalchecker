@@ -1,0 +1,21 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Record {
+  id        Int      @id @default(autoincrement())
+  longitude Float
+  latitude  Float
+  network   String   @db.VarChar(100)
+  device    String   @db.VarChar(100)
+  speed     Float
+  createdAt DateTime @default(now())
+
+  @@map("records")
+}

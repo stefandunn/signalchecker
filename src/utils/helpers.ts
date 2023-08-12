@@ -3,3 +3,8 @@ export const getResolvedValueOrElse = <T = any>(
   fallback: any
 ): T =>
   Object(valueOrPromise).constructor === Promise ? fallback : valueOrPromise;
+
+export const sleep = (milliseconds: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });

@@ -1,6 +1,18 @@
-import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  HTMLAttributes,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
-import { deviceSearchResultsState, deviceState } from "./DeviceLookup.states";
+import {
+  deviceSearchResultsState,
+  deviceQueryState,
+  deviceSelectedState,
+} from "./DeviceLookup.states";
 import { Timeout } from "@/types/common";
 import { getResolvedValueOrElse } from "@/utils/helpers";
 import deviceLookupStyles from "./DeviceLookup.module.scss";
@@ -10,11 +22,13 @@ import clsx from "clsx";
 export const DeviceLookup: FC<HTMLAttributes<HTMLDivElement>> = ({
   className,
 }) => {
-  const setDevice = useSetRecoilState(deviceState);
   const { state, contents: apiDevices } = useRecoilValueLoadable(
     deviceSearchResultsState
   );
-  const [query, setQuery] = useState<string>("");
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const setDevice = useSetRecoilState(deviceQueryState);
+  const setSelectedDevice = useSetRecoilState(deviceSelectedState);
+  const [inputVal, setInputVal] = useState<string>("");
   const debouncer = useRef<Timeout>();
   const prevResults = useRef<string[] | undefined>();
 
@@ -29,37 +43,64 @@ export const DeviceLookup: FC<HTMLAttributes<HTMLDivElement>> = ({
     prevResults.current
   );
 
-  useEffect(() => {
+  const handleInput = (
+    e: ChangeEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>
+  ) => {
+    const { value } = e.target as HTMLInputElement;
+    setInputVal(value);
+    if (e.type === "change") {
+      setSelectedDevice("");
+    }
     if (debouncer.current) {
       clearTimeout(debouncer.current);
     }
 
     debouncer.current = setTimeout(() => {
-      if (query.length > 2) {
-        setDevice(query);
-      }
+      setDevice(value);
     }, 600);
-  }, [query, setDevice]);
+  };
+
+  useEffect(() => {
+    const handleDropdownBlur = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest("#device-lookup")) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleDropdownBlur);
+
+    return () => {
+      document.removeEventListener("click", handleDropdownBlur);
+    };
+  }, []);
 
   return (
-    <div className={clsx(deviceLookupStyles.deviceLookup, className)}>
+    <div className={clsx(className)} id="device-lookup">
       <label className="block mt-3" htmlFor="device">
         Device:
       </label>
       <input
-        value={query}
-        onKeyUp={(e) => setQuery(e.currentTarget.value)}
+        value={inputVal}
+        onFocus={() => setShowDropdown(true)}
+        onChange={handleInput}
+        onKeyUp={handleInput}
         placeholder="Start typing (3 characters min.)"
         id="device"
       />
       {devices && (
-        <ul className={deviceLookupStyles.deviceDropdown}>
+        <ul
+          className={clsx(
+            deviceLookupStyles.deviceDropdown,
+            showDropdown && deviceLookupStyles.deviceDropdownShown
+          )}
+        >
           {devices.map((device) => (
             <li
               key={device}
               onClick={() => {
-                setDevice(device);
-                setQuery(device);
+                setShowDropdown(false);
+                setSelectedDevice(device);
+                setInputVal(device);
               }}
             >
               {device}

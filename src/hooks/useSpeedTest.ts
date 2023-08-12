@@ -1,5 +1,7 @@
+import { speedTestState } from "@/states/speedtest";
 import axios, { AxiosError } from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSetRecoilState } from "recoil";
 
 export type DownloadSize = "small" | "medium" | "large";
 
@@ -8,8 +10,18 @@ export const useSpeedTest = () => {
   const speeds = useRef<number[]>([]);
   const [avgSpeed, setAvgSpeed] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
+  const setSpeedTestData = useSetRecoilState(speedTestState);
 
   const controller = useRef<AbortController>();
+
+  useEffect(() => {
+    setSpeedTestData({
+      processing,
+      progress,
+      speed: avgSpeed,
+      complete: progress === 100,
+    });
+  }, [processing, avgSpeed, progress, setSpeedTestData]);
 
   const getDownloadDetails = (size: DownloadSize) => {
     switch (size) {
@@ -76,7 +88,12 @@ export const useSpeedTest = () => {
     speed: avgSpeed.toFixed(1),
     progress,
     run,
-    stop: () => controller.current?.abort(),
+    stop: () => {
+      if (confirm("Are you sure?")) {
+        controller.current?.abort();
+      }
+    },
     processing,
+    complete: progress === 100,
   };
 };

@@ -19,7 +19,12 @@ export const GET = async (req: NextRequest) => {
         const matches = uniq(
           Array.from(
             dom.document.querySelectorAll(".autocomplete-list-link-title")
-          ).map((item) => item.textContent?.trim().replace(/\([^\)]+\)/, ""))
+          ).map((item) =>
+            item.textContent
+              ?.trim()
+              .replace(/\([^\)]+\)/, "")
+              .trim()
+          )
         );
         return NextResponse.json({ devices: matches });
       } catch (e) {

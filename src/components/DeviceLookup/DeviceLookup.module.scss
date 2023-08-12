@@ -1,18 +1,12 @@
-.deviceLookup {
-  input + ul {
-    @apply hidden;
-  }
-
-  input:focus + ul {
-    @apply block;
-  }
-}
-
 .deviceDropdown {
-  @apply max-h-[200px] bg-slate-50 border border-slate-200 shadow-xl overflow-auto mx-2 rounded-lg absolute z-10;
+  @apply max-h-[200px] bg-slate-50 border border-slate-200 shadow-xl overflow-auto mx-2 rounded-lg absolute z-10 hidden;
   transform: translateY(-0.25rem);
 
   li {
     @apply p-4 cursor-pointer transition-all hover:text-white hover:bg-slate-500;
   }
+}
+
+.deviceDropdownShown {
+  @apply block;
 }
