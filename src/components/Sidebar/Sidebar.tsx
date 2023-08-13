@@ -11,7 +11,7 @@ export const Sidebar: FC<ClassName> = ({ className }) => {
     <aside
       className={clsx(
         className,
-        "p-5 w-[50vw] max-w-[250px] flex flex-col items-stretch"
+        "p-5 md:w-[50vw] md:max-w-[250px] flex flex-col items-stretch"
       )}
     >
       <h1 className="font-light text-4xl mb-5 text-cyan-500">Signal Checker</h1>

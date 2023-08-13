@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 @import "~mapbox-gl/dist/mapbox-gl.css";
+@import "~react-circular-progressbar/dist/styles.css";
+
+html {
+  @apply h-full;
+}
 
 body {
-  @apply font-normal;
+  @apply font-normal min-h-full flex flex-col items-stretch;
+
+  > * {
+    @apply flex-grow;
+  }
 }
 
 * {

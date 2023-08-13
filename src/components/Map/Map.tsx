@@ -138,7 +138,10 @@ export const Map: FC<ClassName> = ({ className }) => {
   }, [longitude, latitude, addCurrentMarker]);
 
   return (
-    <div className={clsx(className, "h-screen relative")} ref={mapElRef}>
+    <div
+      className={clsx(className, "h-full relative flex-grow")}
+      ref={mapElRef}
+    >
       <div className="absolute top-0 left-0 h-full w-full loading loading-dark flex items-center justify-center">
         <div className="text-white text-xl font-light text-center">
           <div>Obtaining your location</div>
