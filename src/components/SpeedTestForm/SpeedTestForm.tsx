@@ -12,14 +12,16 @@ import {
   buildStyles,
 } from "react-circular-progressbar";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { deviceSelectedState } from "../DeviceLookup/DeviceLookup.states";
 import { userLocationState } from "@/states/location";
+import { refreshMarkersState } from "@/states/map";
 
 export const SpeedTestForm: FC<{
   closeModal: () => unknown;
 }> = ({ closeModal }) => {
   const { speed, progress, run, processing, stop, complete } = useSpeedTest();
+  const setRefreshMap = useSetRecoilState(refreshMarkersState);
   const [network, setNetwork] = useState<string>("");
   const [submitingResult, setSubmittingResult] = useState<boolean>(false);
   const device = useRecoilValue(deviceSelectedState);
@@ -42,8 +44,8 @@ export const SpeedTestForm: FC<{
         device,
         network,
       })
-      .then((response: AxiosResponse) => {
-        console.log(response);
+      .then(() => {
+        setRefreshMap((i) => i + 1);
         closeModal();
       })
       .catch((error: AxiosError) => {

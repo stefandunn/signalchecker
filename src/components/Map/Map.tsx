@@ -52,11 +52,13 @@ export const Map: FC<ClassName> = ({ className }) => {
     selectMapMarkerRef.current = new mapbox.Marker()
       .setLngLat(coords)
       .addTo(map);
+
+    selectMapMarkerRef.current.getElement().style.zIndex = "10";
     map.flyTo({ center: coords, duration: 1000, essential: true });
   }, []);
 
-  const clearMarkers = useCallback(() => {
-    for (const marker of mapMarkersRef.current) {
+  const clearMarkers = useCallback((markers: mapbox.Marker[]) => {
+    for (const marker of markers) {
       marker.remove();
     }
   }, []);
@@ -68,7 +70,9 @@ export const Map: FC<ClassName> = ({ className }) => {
     }
     markers.forEach((coords) => {
       mapMarkersRef.current.push(
-        new mapbox.Marker({ color: "#bdc3c7" }).setLngLat(coords).addTo(map)
+        new mapbox.Marker({ color: "#bdc3c7", scale: 1.3 })
+          .setLngLat(coords)
+          .addTo(map)
       );
     });
   }, []);
@@ -95,12 +99,30 @@ export const Map: FC<ClassName> = ({ className }) => {
   );
 
   useEffect(() => {
-    if (serverMarkersState === "loading") {
-      clearMarkers();
+    const map = mapRef.current;
+    if (!map) {
+      return;
     }
     if (serverMarkersState === "hasValue") {
+      const existingMarkers = [...mapMarkersRef.current];
+      const newMarkers: mapbox.Marker[] = [];
       const longLats = contents as LngLat[];
-      addMarkers(longLats);
+
+      // Add new markers
+      for (const coords of longLats) {
+        newMarkers.push(
+          new mapbox.Marker({ color: "#bdc3c7", scale: 1.3 })
+            .setLngLat(coords)
+            .addTo(map)
+        );
+      }
+
+      // Remove existing
+      for (const marker of existingMarkers) {
+        marker.remove();
+      }
+
+      mapMarkersRef.current = newMarkers;
     }
   }, [contents, serverMarkersState, clearMarkers, addMarkers]);
 

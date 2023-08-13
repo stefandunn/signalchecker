@@ -10,9 +10,15 @@ export const mapBoundingBoxState = atom<{
   default: { min: { lng: 0, lat: 0 }, max: { lng: 0, lat: 0 } },
 });
 
+export const refreshMarkersState = atom<number>({
+  key: "refreshMarkers",
+  default: 0,
+});
+
 export const mapMarkersState = selector<LngLat[]>({
   key: "mapMarkers",
   get: async ({ get }) => {
+    get(refreshMarkersState);
     const boundingBox = get(mapBoundingBoxState);
     return axios
       .get("/api/results", {
