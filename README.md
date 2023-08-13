@@ -1,34 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Signal Checker
 
-## Getting Started
+Check your internet speed with others in your area based on your mobile network provider and device. The map will plot markers of other test results.
 
-First, run the development server:
+This project is designed to run with a [Mapbox API key](https://account.mapbox.com/access-tokens) and a [Supabase database](https://supabase.com/).
+
+> This project is not fully-functional at the moment. Intent to include marker clustering, marker details of results and marker colouring based on speed results.
+
+The project is built on the [NextJS framework](https://nextjs.org/docs) using [Prisma](https://www.prisma.io/docs) as an ORM library to interact with the database.
+
+## Setup
+
+To run this locally, clone the repo and copy `.env.example` and populate the file with the relevant API keys.
+
+To install dependencies, run:
 
 ```bash
-npm run dev
+yarn install
 # or
-yarn dev
-# or
-pnpm dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the database migrations and build the database schema, run:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx prisma migrate dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To run the project:
 
-## Learn More
+```bash
+yarn dev
+# or
+npm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+To build the project and start the built server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+yarn build & yarn start
+# or
+npm build & yarn start
+```
