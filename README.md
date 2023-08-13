@@ -41,3 +41,11 @@ yarn build & yarn start
 # or
 npm build & yarn start
 ```
+
+### Project features:
+
+- Run speed tests (small, medium large files)
+- Get average download speeds
+- Update map markers with results as it pans
+- Device lookup
+- User location detection
