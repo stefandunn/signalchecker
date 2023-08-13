@@ -4,7 +4,7 @@ Check your internet speed with others in your area based on your mobile network 
 
 This project is designed to run with a [Mapbox API key](https://account.mapbox.com/access-tokens) and a [Supabase database](https://supabase.com/).
 
-> This project is not fully-functional at the moment. Intent to include marker clustering, marker details of results and marker colouring based on speed results.
+> This project is not fully-functional at the moment. Intent to include marker clustering.
 
 The project is built on the [NextJS framework](https://nextjs.org/docs) using [Prisma](https://www.prisma.io/docs) as an ORM library to interact with the database.
 

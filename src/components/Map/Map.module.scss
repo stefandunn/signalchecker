@@ -1,0 +1,11 @@
+.markerLoader {
+  @apply absolute bottom-3 right-4 z-10 text-2xl opacity-0 transition-opacity duration-700;
+
+  svg {
+    @apply fill-white animate-spin;
+  }
+}
+
+.markerLoaderShow {
+  @apply opacity-100;
+}

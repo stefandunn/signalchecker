@@ -10,8 +10,8 @@ export const ModalPopup: FC<ModalProps & ModalRefProps> = ({
   close,
   children,
   title,
+  onClose,
   closeOnBlur = true,
-  ...props
 }) => {
   const [show, setShow] = useState<boolean>(true);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -24,6 +24,9 @@ export const ModalPopup: FC<ModalProps & ModalRefProps> = ({
     e.preventDefault();
     setShow(false);
     close();
+    if (typeof onClose === "function") {
+      onClose();
+    }
   };
 
   return (

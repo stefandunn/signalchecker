@@ -1,4 +1,4 @@
-import { LngLat } from "@/types/common";
+import { LngLat, LngLatMarker } from "@/types/common";
 import axios, { AxiosResponse } from "axios";
 import { atom, selector } from "recoil";
 
@@ -15,7 +15,7 @@ export const refreshMarkersState = atom<number>({
   default: 0,
 });
 
-export const mapMarkersState = selector<LngLat[]>({
+export const mapMarkersState = selector<LngLatMarker[]>({
   key: "mapMarkers",
   get: async ({ get }) => {
     get(refreshMarkersState);
@@ -34,8 +34,13 @@ export const mapMarkersState = selector<LngLat[]>({
           data: { data: lnglats },
         }: AxiosResponse<{
           status: string;
-          data: LngLat[];
+          data: LngLatMarker[];
         }>) => lnglats
-      ) as Promise<LngLat[]>;
+      ) as Promise<LngLatMarker[]>;
   },
+});
+
+export const selectedMarkerState = atom<LngLatMarker | null>({
+  key: "selectedMarker",
+  default: null,
 });

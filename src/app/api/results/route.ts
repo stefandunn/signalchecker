@@ -44,10 +44,23 @@ export const GET = async (req: NextRequest) => {
         },
       })
       .then((results) =>
-        results.map(({ latitude, longitude }) => ({
-          lng: longitude,
-          lat: latitude,
-        }))
+        results.map(
+          ({
+            latitude: lat,
+            longitude: lng,
+            speed,
+            device,
+            network,
+            createdAt,
+          }) => ({
+            lng,
+            lat,
+            device,
+            network,
+            speed,
+            createdAt,
+          })
+        )
       )
       .then((markerCoords) =>
         NextResponse.json(

@@ -3,7 +3,7 @@ import { userLocationState } from "@/states/location";
 import { ClassName } from "@/types/props";
 import clsx from "clsx";
 import mapbox, { EventData, MapEventType } from "mapbox-gl";
-
+import mapStyles from "./Map.module.scss";
 import { FC, useCallback, useEffect, useRef } from "react";
 import {
   useRecoilStateLoadable,
@@ -11,8 +11,15 @@ import {
   useSetRecoilState,
 } from "recoil";
 import { CiLocationOn } from "react-icons/ci";
-import { mapBoundingBoxState, mapMarkersState } from "@/states/map";
-import { LngLat } from "@/types/common";
+import {
+  mapBoundingBoxState,
+  mapMarkersState,
+  selectedMarkerState,
+} from "@/states/map";
+import { LngLatMarker } from "@/types/common";
+import { FaCircleNotch } from "react-icons/fa";
+import { MarkerPopup } from "../MarkerPopup/MarkerPopup";
+import { colourFromSpeed } from "@/utils/helpers";
 
 mapbox.accessToken = process.env.NEXT_PUBLIC_MAP_API_KEY;
 
@@ -33,6 +40,7 @@ export const Map: FC<ClassName> = ({ className }) => {
 
   const { state: serverMarkersState, contents } =
     useRecoilValueLoadable(mapMarkersState);
+  const setCurrentMarker = useSetRecoilState(selectedMarkerState);
   const setBoundingBox = useSetRecoilState(mapBoundingBoxState);
   const mapElRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapbox.Map>();
@@ -106,15 +114,29 @@ export const Map: FC<ClassName> = ({ className }) => {
     if (serverMarkersState === "hasValue") {
       const existingMarkers = [...mapMarkersRef.current];
       const newMarkers: mapbox.Marker[] = [];
-      const longLats = contents as LngLat[];
+      const longLats = contents as LngLatMarker[];
 
       // Add new markers
-      for (const coords of longLats) {
-        newMarkers.push(
-          new mapbox.Marker({ color: "#bdc3c7", scale: 1.3 })
-            .setLngLat(coords)
-            .addTo(map)
-        );
+      for (const newMarker of longLats) {
+        const marker = new mapbox.Marker({
+          color: colourFromSpeed(newMarker.speed),
+          scale: 1.3,
+        })
+          .setLngLat({ lng: newMarker.lng, lat: newMarker.lat })
+          .addTo(map);
+        marker
+          .getElement()
+          .classList.add(
+            "cursor-pointer",
+            "animate-all",
+            "opaicty-100",
+            "hover:opacity-80"
+          );
+        marker.getElement().addEventListener("click", (e) => {
+          e.stopPropagation();
+          setCurrentMarker(newMarker);
+        });
+        newMarkers.push(marker);
       }
 
       // Remove existing
@@ -124,7 +146,13 @@ export const Map: FC<ClassName> = ({ className }) => {
 
       mapMarkersRef.current = newMarkers;
     }
-  }, [contents, serverMarkersState, clearMarkers, addMarkers]);
+  }, [
+    contents,
+    serverMarkersState,
+    clearMarkers,
+    addMarkers,
+    setCurrentMarker,
+  ]);
 
   useEffect(() => {
     const { current: domEl } = mapElRef;
@@ -132,7 +160,7 @@ export const Map: FC<ClassName> = ({ className }) => {
       return;
     }
 
-    domEl.innerHTML = "";
+    domEl.querySelector("#map-loader")?.remove();
 
     const map = new mapbox.Map({
       container: domEl,
@@ -164,7 +192,20 @@ export const Map: FC<ClassName> = ({ className }) => {
       className={clsx(className, "h-full relative flex-grow")}
       ref={mapElRef}
     >
-      <div className="absolute top-0 left-0 h-full w-full loading loading-dark flex items-center justify-center">
+      <MarkerPopup />
+      <div
+        id="marker-loader"
+        className={clsx(
+          mapStyles.markerLoader,
+          serverMarkersState === "loading" && mapStyles.markerLoaderShow
+        )}
+      >
+        <FaCircleNotch />
+      </div>
+      <div
+        id="map-loader"
+        className="absolute top-0 left-0 h-full w-full loading loading-dark flex items-center justify-center"
+      >
         <div className="text-white text-xl font-light text-center">
           <div>Obtaining your location</div>
           <div className="animate-bounce mt-5">

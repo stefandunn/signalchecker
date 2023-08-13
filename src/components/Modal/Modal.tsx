@@ -42,7 +42,13 @@ export const Modal = forwardRef<ModalRefProps, ModalProps>((props, ref) => {
     };
   }, [show]);
 
-  const close = () => setShow(false);
+  const close = () => {
+    setShow(false);
+    const { onClose } = props;
+    if (typeof onClose === "function") {
+      onClose();
+    }
+  };
   const open = () => setShow(true);
 
   useImperativeHandle(ref, () => ({

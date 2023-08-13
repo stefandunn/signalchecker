@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "5.1.1",
     "@types/lodash": "^4.14.196",
+    "@types/luxon": "^3.3.1",
     "@types/mapbox-gl": "^2.7.12",
     "@types/node": "20.4.8",
     "@types/react": "18.2.18",
@@ -24,6 +25,7 @@
     "eslint-config-next": "13.4.12",
     "linkedom": "^0.15.1",
     "lodash": "^4.17.21",
+    "luxon": "^3.4.0",
     "mapbox-gl": "^2.15.0",
     "next": "13.4.12",
     "postcss": "8.4.27",
