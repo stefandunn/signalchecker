@@ -60,7 +60,7 @@ export const useSpeedTest = () => {
           const progress = (totalDownloadedBytes / downloadDetails.size) * 100;
           const newTime = new Date().getTime();
           const timeLapsed = (newTime - startTimeInterval) / 1000; // in seconds
-          const speed = downloadedBytes / 1024 / 1024 / timeLapsed;
+          const speed = (downloadedBytes / 1024 / 1024 / timeLapsed) * 8; // times by 8 to get in bits
           startTimeInterval = newTime;
           speeds.current.push(speed);
           setAvgSpeed(() => {
