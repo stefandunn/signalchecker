@@ -29,7 +29,7 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json({ devices: matches });
       } catch (e) {
         console.error(e);
-        return [];
+        return NextResponse.json([]);
       }
     });
 };

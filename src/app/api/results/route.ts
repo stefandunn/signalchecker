@@ -26,7 +26,7 @@ export const GET = async (req: NextRequest) => {
   const maxLonguitude = req.nextUrl.searchParams.get("maxLong");
 
   if (!minLatitude || !maxLatitude || !minLongitude || !maxLonguitude) {
-    return [];
+    return NextResponse.json([]);
   }
 
   return dbQuery((prisma) =>
